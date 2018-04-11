@@ -114,7 +114,7 @@ public class Config {
                     content = "";
                 } else {
                     if (isMessage) {
-                        content += line  + "\r\n";
+                        content += line + "\r\n";
                     } else {
                         LOG.warning("The message is not valid");
                     }

@@ -5,6 +5,9 @@ import ch.heigvd.res.model.mail.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
@@ -37,23 +40,22 @@ public class SmtpClient implements ISmtpClient {
 
     private static final Logger LOG = Logger.getLogger(SmtpClient.class.getName());
 
-
     // SMTP RFC (5321) compliants status
     private static final String SMTP_STATUS_OK = "250"; // Requested mail action okay, completed
 
     // SMTP RFC (5321) compliants commands
     private static final String SMTP_NEW_LINE = "\r\n";
     private static final String SMTP_EHLO = "EHLO ";
-    private static final String SMTP_MAIL_FROM = "MAIL FROM: ";
-    private static final String SMTP_RCPT_TO = "RCPT TO: ";
+    private static final String SMTP_MAIL_FROM = "MAIL FROM:";
+    private static final String SMTP_RCPT_TO = "RCPT TO:";
     private static final String SMTP_DATA = "DATA" + SMTP_NEW_LINE;
     private static final String SMTP_DATA_FROM = "From: ";
     private static final String SMTP_DATA_SUBJECT = "Subject: ";
-    private static final String SMTP_CONTENT_TYPE = "Content-Type: text/html; charset=\"UTF-8\"" + SMTP_NEW_LINE;
+    private static final String SMTP_CONTENT_TYPE = "Content-Type: text/plain; charset=\"UTF-8\"" + SMTP_NEW_LINE;
 
     private static final String SMTP_DATA_CC = "Cc: ";
     private static final String SMTP_DATA_TO = "To: ";
-    private static final String SMTP_END = ".";
+    private static final String SMTP_END = "." + SMTP_NEW_LINE;
     private static final String SMTP_CLOSE = "QUIT" + SMTP_NEW_LINE;
 
     private Config config;
@@ -65,119 +67,113 @@ public class SmtpClient implements ISmtpClient {
         this.config = config;
     }
 
+    private void print(String m, boolean newLine) {
+        if (newLine)
+            print(m + SMTP_NEW_LINE);
+        else
+            print(m);
+    }
+    private void print(String m) {
+        System.out.print(m);
+        writer.write(m);
+        writer.flush();
+    }
+
     // Create a SMTP connection in order to send a mail
     public void sendMessage(Message message) throws IOException {
         Socket socket = new Socket(config.getSMTP_SERVER(), config.getSMTP_PORT());
         writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true );
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
-        LOG.info("Connected to SMTP server (" + config.getSMTP_SERVER() + ":" + config.getSMTP_PORT() + ")");
+        System.out.print("Connected to SMTP server (" + config.getSMTP_SERVER() + ":" + config.getSMTP_PORT() + ")");
 
         // Begin communications ..
         String line = "";
-        LOG.info(reader.readLine()); // Welcome from the SMTP server
+        System.out.print(reader.readLine()); // Welcome from the SMTP server
 
         // EHLO server
-        String cmd = SMTP_EHLO + config.getSMTP_SERVER();
-        writer.write(SMTP_EHLO + config.getSMTP_SERVER() + SMTP_NEW_LINE);
-        writer.flush();
+        print(SMTP_EHLO + config.getSMTP_SERVER(), true);
         line = reader.readLine();
         if (!line.startsWith(SMTP_STATUS_OK))
             throw new IOException("Error during EHLO: " + line);
 
         while (line.startsWith(SMTP_STATUS_OK + "-")) { // Server can return multiple check status with response 250-
             line = reader.readLine();
-            LOG.info(line);
+            System.out.print(line + SMTP_NEW_LINE);
         }
 
         // MAIL FROM
-        writer.write(SMTP_MAIL_FROM + "<" + message.getSender() + ">" + SMTP_NEW_LINE);
-        writer.flush();
+        print(SMTP_MAIL_FROM + "<" + message.getSender() + ">", true);
         line = reader.readLine();
-        LOG.info(line);
+        System.out.print(line + SMTP_NEW_LINE);
 
         // RCPT TO
         for (String to : message.getRecipients()) {
-            LOG.info(SMTP_RCPT_TO + to + SMTP_NEW_LINE);
-            writer.write(SMTP_RCPT_TO + to + SMTP_NEW_LINE);
-            writer.flush();
-            LOG.info(reader.readLine());
+            print(SMTP_RCPT_TO + "<" + to + ">", true);
+            System.out.print(reader.readLine() + SMTP_NEW_LINE);
         }
 
         // CC
         if (message.getCc() != null) {
             for (String to : message.getCc()) {
-                writer.write(SMTP_RCPT_TO);
-                writer.write(to);
-                writer.write(SMTP_NEW_LINE);
-                writer.flush();
-                LOG.info(reader.readLine());
+                print(SMTP_RCPT_TO + "<" + to + ">", true);
+                System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
 
         // BCC
         if (message.getBcc() != null) {
             for (String to : message.getBcc()) {
-                writer.write(SMTP_RCPT_TO);
-                writer.write(to);
-                writer.write(SMTP_NEW_LINE);
-                writer.flush();
-                LOG.info(reader.readLine());
+                print(SMTP_RCPT_TO + "<" + to + ">", true);
+                System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
 
         // DATA
-        writer.write(SMTP_DATA + SMTP_NEW_LINE);
-        writer.flush();
-        LOG.info(reader.readLine());
+        print(SMTP_DATA);
+        String res = reader.readLine();
+        System.out.println(res);
 
-        // DATA FROM
-        LOG.info(SMTP_DATA_FROM + message.getSender() + SMTP_NEW_LINE);
-        writer.write(SMTP_DATA_FROM + message.getSender() + SMTP_NEW_LINE);
-        writer.flush();
 
-        // SUBJECT
-        LOG.info(SMTP_DATA_SUBJECT + message.getSubject().trim() + SMTP_NEW_LINE);
-        writer.write(SMTP_DATA_SUBJECT + message.getSubject().trim() + SMTP_NEW_LINE);
-        writer.flush();
-
-        // CONTENT TYPE
-        LOG.info(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
-        writer.write(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
-        writer.flush();
+        // Date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
+        print("Date: " + dateFormat.format(new Date()), true);
 
         // RECIPIENTS
-        writer.write(SMTP_DATA_TO + message.getRecipients()[0]);
-        LOG.info(SMTP_DATA_TO + message.getRecipients()[0]);
-
+        String tmp = SMTP_DATA_TO + message.getRecipients()[0];
         for (int i = 1; i < message.getRecipients().length; ++i) {
-            writer.write(", " + message.getRecipients()[i]);
-            LOG.info(", " + message.getRecipients()[i]);
+            tmp += "," + message.getRecipients()[i];
         }
-        writer.write(SMTP_NEW_LINE);
-        writer.flush();
+        print(tmp, true);
+
+        // DATA FROM
+        print(SMTP_DATA_FROM + message.getSender(), true);
+
+        // SUBJECT
+        print(SMTP_DATA_SUBJECT + message.getSubject().trim(), true);
+
+        // CONTENT TYPE
+        print(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
 
         // CCs
         if (message.getCc() != null) {
-            writer.write(SMTP_DATA_CC + message.getCc()[0]);
+            tmp = SMTP_DATA_CC + message.getCc()[0];
             for (int i = 1; i < message.getCc().length; ++i) {
-                writer.write(", " + message.getCc()[i]);
+                tmp += ", " + message.getCc()[i];
             }
-            writer.write(SMTP_NEW_LINE);
-            writer.flush();
+            print(tmp, true);
         }
 
         // Message body
-        LOG.info(message.getBody() + SMTP_NEW_LINE);
-        writer.write(message.getBody() + SMTP_NEW_LINE);
-        writer.write(SMTP_NEW_LINE);
-        writer.flush();
-        writer.write(SMTP_END);
-        writer.flush();
-        LOG.info(reader.readLine());
-        writer.write(SMTP_CLOSE);
-        writer.flush();
+        print("", true);
+        print(message.getBody(), true);
+        print(SMTP_END, true);
+
+        System.out.println(reader.readLine());
+
+        print(SMTP_CLOSE);
         writer.close();
         reader.close();
         socket.close();
+        System.out.print("\nMessage sent ...");
     }
 }
