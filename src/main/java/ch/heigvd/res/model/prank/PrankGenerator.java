@@ -35,10 +35,10 @@ public class PrankGenerator {
     }
 
     private Group generateGroup(int size) {
-        ArrayList<Person> recevers = new ArrayList<Person>();
+        ArrayList<Person> receivers = new ArrayList<Person>();
         Collections.shuffle(config.getPersons());
         Person sender = config.getPersons().get(0);
-        for(int i = 1; i < size; i++) recevers.add(config.getPersons().get(i));
-        return new Group(sender, recevers);
+        for(int i = 1; i < size; i++) receivers.add(config.getPersons().get(i));
+        return new Group(sender, receivers);
     }
 }
