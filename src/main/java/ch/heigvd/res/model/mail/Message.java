@@ -1,6 +1,8 @@
 package ch.heigvd.res.model.mail;
 
-public class Message {
+public class Message
+{
+
     private String title;
     private String body;
 
