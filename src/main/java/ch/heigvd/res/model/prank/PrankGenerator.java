@@ -11,6 +11,10 @@ public class PrankGenerator {
     private Config config;
     private ArrayList<Prank> pranks;
 
+    public PrankGenerator(Config c) {
+        config = c;
+    }
+
     public ArrayList<Prank> getPranks() {
         return pranks;
     }
