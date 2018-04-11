@@ -19,8 +19,8 @@ public class Prank {
         return group.getSender();
     }
 
-    public ArrayList<Person> getRecevers() {
-        return group.getRecevers();
+    public ArrayList<Person> getReceivers() {
+        return group.getReceivers();
     }
 
     public String getTitle() {
