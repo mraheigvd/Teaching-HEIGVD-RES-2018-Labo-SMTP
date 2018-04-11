@@ -35,3 +35,6 @@ publish it:
 finaly :
 
 ```docker run -p 2525:25 -p 8080:8282 mraheigvd/mailrobot-mock```
+
+
+The docker image available on Docker Hub : https://hub.docker.com/r/mraheigvd/mailrobot-mock/
