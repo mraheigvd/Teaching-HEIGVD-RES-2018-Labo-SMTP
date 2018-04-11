@@ -26,13 +26,6 @@ public class Config {
     private ArrayList<Person> persons;
     private ArrayList<Message> messages;
 
-    public ArrayList<Person> getPersons() {
-        return persons;
-    }
-
-    public ArrayList<Message> getMessages() {
-        return messages;
-    }
 
     Config(String config) {
         Properties prop = new Properties();
@@ -90,11 +83,41 @@ public class Config {
 
     }
 
-
-
     public static boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
+    }
+
+    public String getSMTP_SERVER() {
+        return SMTP_SERVER;
+    }
+
+    public int getSMTP_PORT() {
+        return SMTP_PORT;
+    }
+
+    public String getSPOOFED_MAIL() {
+        return SPOOFED_MAIL;
+    }
+
+    public int getNB_GROUPS() {
+        return NB_GROUPS;
+    }
+
+    public String getEMAIL_FILE() {
+        return EMAIL_FILE;
+    }
+
+    public String getMESSAGES_FILE() {
+        return MESSAGES_FILE;
+    }
+
+    public ArrayList<Person> getPersons() {
+        return persons;
+    }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 
 

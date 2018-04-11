@@ -15,6 +15,6 @@ public class SmtpClient implements ISmtpClient {
     }
 
     public void sendMessage(Message message) throws IOException {
-        Socket socket = new Socket(config.);
+        Socket socket = new Socket(config.getSMTP_SERVER(), config.getSMTP_PORT());
     }
 }
