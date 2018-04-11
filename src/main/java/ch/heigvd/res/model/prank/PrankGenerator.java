@@ -1,9 +1,40 @@
 package ch.heigvd.res.model.prank;
 
-public class PrankGenerator {
+import ch.heigvd.res.config.Config;
+import ch.heigvd.res.model.mail.Group;
+import ch.heigvd.res.model.mail.Message;
+import ch.heigvd.res.model.mail.Person;
 
-    public Prank getAPrank() {
-        //TODO
-        return null;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class PrankGenerator {
+    private Config config;
+    private ArrayList<Prank> pranks;
+
+    public ArrayList<Prank> getPranks() {
+        return pranks;
+    }
+
+    public void generatePranks(int nbrGroups) {
+        ArrayList<Person> persons = config.getPersons();
+        ArrayList<Message> messages = config.getMessages();
+        //test if config has enough emails
+        if(persons.size() < 3) ;// error
+        //test if config has one of more pranks
+        if(messages.size() < 1) ;// error
+
+        //generate pranks
+        for(int i = 0; i < nbrGroups; i++) {
+            pranks.add(new Prank(generateGroup(Math.min(2, persons.size() / nbrGroups)), null));
+        }
+    }
+
+    private Group generateGroup(int size) {
+        ArrayList<Person> recevers = new ArrayList<Person>();
+        Collections.shuffle(config.getPersons());
+        Person sender = config.getPersons().get(0);
+        for(int i = 1; i < size; i++) recevers.add(config.getPersons().get(i));
+        return new Group(sender, recevers);
     }
 }

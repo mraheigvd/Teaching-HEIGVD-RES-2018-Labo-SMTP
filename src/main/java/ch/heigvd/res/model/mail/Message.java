@@ -4,6 +4,11 @@ public class Message {
     private String title;
     private String body;
 
+    public Message(String t, String b) {
+        title = t;
+        body = b;
+    }
+
     public String getTitle() {
         return title;
     }
