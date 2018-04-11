@@ -7,6 +7,13 @@ import ch.heigvd.res.model.mail.Person;
 import java.util.ArrayList;
 
 public class Prank {
+
+    /**
+     * private Person victimSender;
+     * private final List<Person> victimsRecipients;
+     * private final List<Person> witnessRecipients;
+     * private String message etc...
+     */
     private Group group;
     private Message message;
 
@@ -24,7 +31,7 @@ public class Prank {
     }
 
     public String getTitle() {
-        return message.getTitle();
+        return message.getSubject();
     }
 
     public String getBody() {
