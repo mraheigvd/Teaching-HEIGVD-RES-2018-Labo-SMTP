@@ -34,4 +34,9 @@ public class Mail {
     public ArrayList<Person> getBcc() {
         return group.getBcc();
     }
+
+    @Override
+    public String toString() {
+        return group + "\n" + message;
+    }
 }

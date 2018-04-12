@@ -24,35 +24,8 @@ public class Message
         return body;
     }
 
-    /*public String getSender() {
-        return sender;
+    @Override
+    public String toString() {
+        return "Subject:" + subject + "\nBody:" + body;
     }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String[] getRecipients() {
-        return recipients;
-    }
-
-    public void setRecipients(String[] recipients) {
-        this.recipients = recipients;
-    }
-
-    public String[] getCc() {
-        return cc;
-    }
-
-    public void setCc(String[] cc) {
-        this.cc = cc;
-    }
-
-    public String[] getBcc() {
-        return bcc;
-    }
-
-    public void setBcc(String[] bcc) {
-        this.bcc = bcc;
-    }*/
 }

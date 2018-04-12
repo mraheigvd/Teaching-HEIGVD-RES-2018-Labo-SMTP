@@ -36,6 +36,8 @@ public class MailRobot {
         //play some pranks
         Collections.shuffle(prankGenerator.getPranks());
         playAPrank(prankGenerator.getPranks().get(0), client);
+
+        //for(Mail m : prankGenerator.getPranks()) System.out.println(m + "\n");
     }
 
     public static void playAPrank(Mail mail, ISmtpClient client) {
