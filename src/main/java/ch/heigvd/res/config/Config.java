@@ -72,7 +72,7 @@ public class Config {
                     Person p = new Person(email);
                     persons.add(p);
                 } else {
-                    LOG.warning("The email (" + email + ") is not a valid (RFC compliant) email. RES : " + validate(email));
+                    LOG.warning("The email (" + email + ") is not a valid (RFC compliant) email. RES : " + EmailValidator.getInstance().isValid(email));
                 }
             }
 
@@ -134,11 +134,6 @@ public class Config {
                 }
             }
         }
-    }
-
-    public static boolean validate(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-        return matcher.find();
     }
 
     public String getSMTP_SERVER() {

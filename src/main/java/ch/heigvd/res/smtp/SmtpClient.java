@@ -81,7 +81,7 @@ public class SmtpClient implements ISmtpClient {
 
     // Create a SMTP connection in order to send a mail
     public void sendMessage(Message message) throws IOException {
-        Socket socket = new Socket(config.getSMTP_SERVER(), config.getSMTP_PORT());
+        socket = new Socket(config.getSMTP_SERVER(), config.getSMTP_PORT());
         writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true );
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         System.out.print("Connected to SMTP server (" + config.getSMTP_SERVER() + ":" + config.getSMTP_PORT() + ")");
