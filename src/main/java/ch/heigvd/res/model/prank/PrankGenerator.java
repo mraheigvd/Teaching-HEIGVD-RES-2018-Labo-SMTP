@@ -14,6 +14,7 @@ public class PrankGenerator {
 
     public PrankGenerator(Config c) {
         config = c;
+        pranks = new ArrayList<Mail>();
     }
 
     public ArrayList<Mail> getPranks() {

@@ -103,7 +103,7 @@ public class SmtpClient implements ISmtpClient {
         }
 
         // MAIL FROM
-        print(SMTP_MAIL_FROM + "<" + mail.getSender() + ">", true);
+        print(SMTP_MAIL_FROM + "<" + mail.getSender().getEmail() + ">", true);
         line = reader.readLine();
         System.out.print(line + SMTP_NEW_LINE);
 
@@ -141,14 +141,14 @@ public class SmtpClient implements ISmtpClient {
         print("Date: " + dateFormat.format(new Date()), true);
 
         // RECIPIENTS
-        String tmp = SMTP_DATA_TO + mail.getReceivers().get(0);
+        String tmp = SMTP_DATA_TO + mail.getReceivers().get(0).getEmail();
         for (int i = 1; i < mail.getReceivers().size(); ++i) {
-            tmp += "," + mail.getReceivers().get(i);
+            tmp += "," + mail.getReceivers().get(i).getEmail();
         }
         print(tmp, true);
 
         // DATA FROM
-        print(SMTP_DATA_FROM + mail.getSender(), true);
+        print(SMTP_DATA_FROM + mail.getSender().getEmail(), true);
 
         // SUBJECT
         print(SMTP_DATA_SUBJECT + mail.getSubject().trim(), true);
