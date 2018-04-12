@@ -28,7 +28,7 @@ public class MailRobot {
         }
         */
 
-        int nbrGroups = 1;// get it from config
+        int nbrGroups = config.getNB_GROUPS();// get it from config
 
         //generate pranks
         prankGenerator.generatePranks(nbrGroups);

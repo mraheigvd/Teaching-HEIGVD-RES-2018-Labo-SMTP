@@ -40,7 +40,7 @@ public class PrankGenerator {
         ArrayList<Person> receivers = new ArrayList<Person>();
         Collections.shuffle(config.getPersons());
         Person sender = config.getPersons().get(0);
-        for(int i = 1; i < size; i++) receivers.add(config.getPersons().get(i));
+        for(int i = 0; i < size; i++) receivers.add(config.getPersons().get(i + 1));
         return new Group(sender, receivers);
     }
 }
