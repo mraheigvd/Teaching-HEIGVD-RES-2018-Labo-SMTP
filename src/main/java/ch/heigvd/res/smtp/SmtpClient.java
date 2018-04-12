@@ -1,7 +1,7 @@
 package ch.heigvd.res.smtp;
 
 import ch.heigvd.res.config.Config;
-import ch.heigvd.res.model.mail.Message;
+import ch.heigvd.res.model.mail.Mail;
 
 import java.io.*;
 import java.net.Socket;
@@ -80,7 +80,7 @@ public class SmtpClient implements ISmtpClient {
     }
 
     // Create a SMTP connection in order to send a mail
-    public void sendMessage(Message message) throws IOException {
+    public void sendMessage(Mail mail) throws IOException {
         socket = new Socket(config.getSMTP_SERVER(), config.getSMTP_PORT());
         writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"), true );
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
@@ -102,27 +102,27 @@ public class SmtpClient implements ISmtpClient {
         }
 
         // MAIL FROM
-        print(SMTP_MAIL_FROM + "<" + message.getSender() + ">", true);
+        print(SMTP_MAIL_FROM + "<" + mail.getSender() + ">", true);
         line = reader.readLine();
         System.out.print(line + SMTP_NEW_LINE);
 
         // RCPT TO
-        for (String to : message.getRecipients()) {
+        for (String to : mail.getRecipients()) {
             print(SMTP_RCPT_TO + "<" + to + ">", true);
             System.out.print(reader.readLine() + SMTP_NEW_LINE);
         }
 
         // CC
-        if (message.getCc() != null) {
-            for (String to : message.getCc()) {
+        if (mail.getCc() != null) {
+            for (String to : mail.getCc()) {
                 print(SMTP_RCPT_TO + "<" + to + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
 
         // BCC
-        if (message.getBcc() != null) {
-            for (String to : message.getBcc()) {
+        if (mail.getBcc() != null) {
+            for (String to : mail.getBcc()) {
                 print(SMTP_RCPT_TO + "<" + to + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
@@ -139,33 +139,33 @@ public class SmtpClient implements ISmtpClient {
         print("Date: " + dateFormat.format(new Date()), true);
 
         // RECIPIENTS
-        String tmp = SMTP_DATA_TO + message.getRecipients()[0];
-        for (int i = 1; i < message.getRecipients().length; ++i) {
-            tmp += "," + message.getRecipients()[i];
+        String tmp = SMTP_DATA_TO + mail.getRecipients()[0];
+        for (int i = 1; i < mail.getRecipients().length; ++i) {
+            tmp += "," + mail.getRecipients()[i];
         }
         print(tmp, true);
 
         // DATA FROM
-        print(SMTP_DATA_FROM + message.getSender(), true);
+        print(SMTP_DATA_FROM + mail.getSender(), true);
 
         // SUBJECT
-        print(SMTP_DATA_SUBJECT + message.getSubject().trim(), true);
+        print(SMTP_DATA_SUBJECT + mail.getSubject().trim(), true);
 
         // CONTENT TYPE
         print(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
 
         // CCs
-        if (message.getCc() != null) {
-            tmp = SMTP_DATA_CC + message.getCc()[0];
-            for (int i = 1; i < message.getCc().length; ++i) {
-                tmp += ", " + message.getCc()[i];
+        if (mail.getCc() != null) {
+            tmp = SMTP_DATA_CC + mail.getCc()[0];
+            for (int i = 1; i < mail.getCc().length; ++i) {
+                tmp += ", " + mail.getCc()[i];
             }
             print(tmp, true);
         }
 
         // Message body
         print("", true);
-        print(message.getBody(), true);
+        print(mail.getBody(), true);
         print(SMTP_END, true);
 
         System.out.println(reader.readLine());

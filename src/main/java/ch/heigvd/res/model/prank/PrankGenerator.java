@@ -2,6 +2,7 @@ package ch.heigvd.res.model.prank;
 
 import ch.heigvd.res.config.Config;
 import ch.heigvd.res.model.mail.Group;
+import ch.heigvd.res.model.mail.Mail;
 import ch.heigvd.res.model.mail.Person;
 
 import java.util.ArrayList;
@@ -9,13 +10,13 @@ import java.util.Collections;
 
 public class PrankGenerator {
     private Config config;
-    private ArrayList<Prank> pranks;
+    private ArrayList<Mail> pranks;
 
     public PrankGenerator(Config c) {
         config = c;
     }
 
-    public ArrayList<Prank> getPranks() {
+    public ArrayList<Mail> getPranks() {
         return pranks;
     }
 
@@ -30,7 +31,7 @@ public class PrankGenerator {
         for(int i = 0; i < nbrGroups; i++) {
             Collections.shuffle(config.getMessages());
             int nbrPersons = Math.max(2, config.getPersons().size() / nbrGroups);
-            pranks.add(new Prank(generateGroup(nbrPersons), config.getMessages().get(0)));
+            pranks.add(new Mail(generateGroup(nbrPersons), config.getMessages().get(0)));
         }
     }
 
