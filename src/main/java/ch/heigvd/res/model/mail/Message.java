@@ -3,11 +3,11 @@ package ch.heigvd.res.model.mail;
 public class Message
 {
 
-    private String sender;
+    /*private String sender;
     private String[] recipients;
     private String[] cc; // copy carbon
     private String[] bcc; // blind carbon copy -> Respect email confidentialy :-)
-
+    */
     private String subject;
     private String body;
 
@@ -24,7 +24,7 @@ public class Message
         return body;
     }
 
-    public String getSender() {
+    /*public String getSender() {
         return sender;
     }
 
@@ -54,5 +54,5 @@ public class Message
 
     public void setBcc(String[] bcc) {
         this.bcc = bcc;
-    }
+    }*/
 }
