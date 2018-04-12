@@ -2,6 +2,7 @@ package ch.heigvd.res.smtp;
 
 import ch.heigvd.res.config.Config;
 import ch.heigvd.res.model.mail.Mail;
+import ch.heigvd.res.model.mail.Person;
 
 import java.io.*;
 import java.net.Socket;
@@ -107,23 +108,24 @@ public class SmtpClient implements ISmtpClient {
         System.out.print(line + SMTP_NEW_LINE);
 
         // RCPT TO
-        for (String to : mail.getRecipients()) {
-            print(SMTP_RCPT_TO + "<" + to + ">", true);
+        //for (String to : mail.getRecipients()) {
+        for (Person to : mail.getReceivers()) {
+            print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
             System.out.print(reader.readLine() + SMTP_NEW_LINE);
         }
 
         // CC
         if (mail.getCc() != null) {
-            for (String to : mail.getCc()) {
-                print(SMTP_RCPT_TO + "<" + to + ">", true);
+            for (Person to : mail.getCc()) {
+                print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
 
         // BCC
         if (mail.getBcc() != null) {
-            for (String to : mail.getBcc()) {
-                print(SMTP_RCPT_TO + "<" + to + ">", true);
+            for (Person to : mail.getBcc()) {
+                print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
@@ -139,9 +141,9 @@ public class SmtpClient implements ISmtpClient {
         print("Date: " + dateFormat.format(new Date()), true);
 
         // RECIPIENTS
-        String tmp = SMTP_DATA_TO + mail.getRecipients()[0];
-        for (int i = 1; i < mail.getRecipients().length; ++i) {
-            tmp += "," + mail.getRecipients()[i];
+        String tmp = SMTP_DATA_TO + mail.getReceivers().get(0);
+        for (int i = 1; i < mail.getReceivers().size(); ++i) {
+            tmp += "," + mail.getReceivers().get(i);
         }
         print(tmp, true);
 
@@ -156,9 +158,9 @@ public class SmtpClient implements ISmtpClient {
 
         // CCs
         if (mail.getCc() != null) {
-            tmp = SMTP_DATA_CC + mail.getCc()[0];
-            for (int i = 1; i < mail.getCc().length; ++i) {
-                tmp += ", " + mail.getCc()[i];
+            tmp = SMTP_DATA_CC + mail.getCc().get(0);
+            for (int i = 1; i < mail.getCc().size(); ++i) {
+                tmp += ", " + mail.getCc().get(i);
             }
             print(tmp, true);
         }

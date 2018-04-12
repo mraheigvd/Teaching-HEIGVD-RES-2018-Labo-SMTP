@@ -6,4 +6,8 @@ public class Person {
     public Person(String e) {
         email = e;
     }
+
+    public String getEmail() {
+        return email;
+    }
 }

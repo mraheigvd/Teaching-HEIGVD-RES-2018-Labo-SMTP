@@ -19,11 +19,19 @@ public class Mail {
         return group.getReceivers();
     }
 
-    public String getTitle() {
+    public String getSubject() {
         return message.getSubject();
     }
 
     public String getBody() {
         return message.getBody();
+    }
+
+    public ArrayList<Person> getCc() {
+        return group.getCc();
+    }
+
+    public ArrayList<Person> getBcc() {
+        return group.getBcc();
     }
 }
