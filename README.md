@@ -3,11 +3,11 @@
 ## Description
 
 Mailrobot is a client application (TCP) in Java in order to communicate through the Java Socket API with a SMTP server. 
-This application automaticaly generate pranks (the message) email to a list of emails (the victims). 
+This application automaticaly generate pranks email to a list of emails (the victims). 
 Application is configured by the config.properties file which contains these properties:
 
-- **SMTP_SERVER** : which contains the SMTP server IP
-- **SMTP_PORT** : which contains the SMTP server port
+- **SMTP_SERVER** : the SMTP server IP
+- **SMTP_PORT** : the SMTP server port
 - **NB_GROUPS** : representing the number of groups that application will generate.
 - **EMAILS_FILE** : the file containing one email per line
 - **MESSAGES_FILE** : the file containing the list of messages. Each message contains a subject and a message. 
