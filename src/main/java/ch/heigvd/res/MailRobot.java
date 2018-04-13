@@ -2,8 +2,6 @@ package ch.heigvd.res;
 
 import ch.heigvd.res.config.Config;
 import ch.heigvd.res.model.mail.Mail;
-import ch.heigvd.res.model.mail.Message;
-import ch.heigvd.res.model.prank.Prank;
 import ch.heigvd.res.model.prank.PrankGenerator;
 import ch.heigvd.res.smtp.ISmtpClient;
 import ch.heigvd.res.smtp.SmtpClient;

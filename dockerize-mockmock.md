@@ -33,7 +33,7 @@ docker iamges
 
 For publishing your docker image on docker hub :
 
-) Create an account and a repo on your account on docker hub : https://hub.docker.com/
+Create an account and a repo on your account on docker hub : https://hub.docker.com/
 
 2) Login to docker : ```docker login```
 
