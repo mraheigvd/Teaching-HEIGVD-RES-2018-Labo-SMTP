@@ -12,32 +12,19 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class MailRobot {
+
     public static void main(String[] args) {
         Config config = new Config("config.properties");
         PrankGenerator prankGenerator = new PrankGenerator(config);
         ISmtpClient client = new SmtpClient(config);
 
-        /*
-        try {
-            Message msg = config.getMessages().get(0);
-            msg.setRecipients(new String[] {"mentor.reka@heig-vd.ch", "kamil.amrani@heig-vd.ch"});
-            msg.setSender("wasadigi@heig-vd.ch");
-            client.sendMessage(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-
-        int nbrGroups = config.getNB_GROUPS();// get it from config
-
-        //generate pranks
-        prankGenerator.generatePranks(nbrGroups);
-
-        //play some pranks
+        // Generate some pranks and shuffle it
+        prankGenerator.generatePranks(config.getNB_GROUPS());
         Collections.shuffle(prankGenerator.getPranks());
-        playAPrank(prankGenerator.getPranks().get(0), client);
 
-        //for(Mail m : prankGenerator.getPranks()) System.out.println(m + "\n");
+        // Plan the pranks
+        for(Mail m : prankGenerator.getPranks())
+            playAPrank(m, client);
     }
 
     public static void playAPrank(Mail mail, ISmtpClient client) {

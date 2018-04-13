@@ -7,22 +7,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.validator.routines.EmailValidator;
 
-// TODO should be static
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: Read the configuration file and the concerned email and messages files
+ * @Date: 13.04.2018
+ */
 public class Config {
 
     private static final Logger LOG = Logger.getLogger(Config.class.getName());
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
+    private static final String CONFIG_FILE = "config.properties";
     private String SMTP_SERVER;
     private int SMTP_PORT;
     private String SPOOFED_MAIL;
     private int NB_GROUPS;
-    private String EMAIL_FILE;
+    private String EMAILS_FILE;
     private String MESSAGES_FILE;
 
     private final String MESSAGE_SEPARATOR = "---";
@@ -33,6 +37,7 @@ public class Config {
     private ArrayList<Message> messages = new ArrayList<Message>();
 
     public Config(String config) {
+        // Read configuration file
         Properties prop = new Properties();
         InputStream input = null;
         try {
@@ -43,11 +48,11 @@ public class Config {
             SMTP_PORT = Integer.parseInt(prop.getProperty("SMTP_PORT"));
             SPOOFED_MAIL = prop.getProperty("SPOOFED_MAIL");
             NB_GROUPS = Integer.parseInt(prop.getProperty("NB_GROUPS"));
-            EMAIL_FILE = prop.getProperty("EMAIL_FILE");
+            EMAILS_FILE = prop.getProperty("EMAILS_FILE");
             MESSAGES_FILE = prop.getProperty("MESSAGES_FILE");
 
             LOG.info("SMTP_SERVER : " + SMTP_SERVER + " SMTP_PORT : " + SMTP_PORT + "SPOOFED_MAIL" + SPOOFED_MAIL
-                    + "NB_GROUPS : " + NB_GROUPS  + "EMAIL_FILE : " + EMAIL_FILE + "MESSAGES_FILE : " + MESSAGES_FILE);
+                    + "NB_GROUPS : " + NB_GROUPS  + "EMAILS_FILE : " + EMAILS_FILE + "MESSAGES_FILE : " + MESSAGES_FILE);
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -64,7 +69,7 @@ public class Config {
         // Reads emails list
         BufferedReader buffer = null;
         try {
-            buffer = new BufferedReader(new InputStreamReader(Config.class.getResourceAsStream("/" + EMAIL_FILE), "UTF8"));
+            buffer = new BufferedReader(new InputStreamReader(Config.class.getResourceAsStream("/" + EMAILS_FILE), "UTF8"));
             String email = "";
             while ( (email = buffer.readLine()) != null) {
                 // For allowing local email => EmailValidator.getInstance(true).isValid(email);
@@ -100,7 +105,6 @@ public class Config {
                 if (line.startsWith("Subject:")) {
                     // Subject of the message
                     // /!\ The subject should not have more than one line !
-                    //isMessage = false;
                     subject = line.substring(SUBJECT_TAG.length(), line.length());
                 } else if (line.startsWith("Message:")) {
                     // Begin of message
@@ -152,8 +156,8 @@ public class Config {
         return NB_GROUPS;
     }
 
-    public String getEMAIL_FILE() {
-        return EMAIL_FILE;
+    public String getEMAILS_FILE() {
+        return EMAILS_FILE;
     }
 
     public String getMESSAGES_FILE() {

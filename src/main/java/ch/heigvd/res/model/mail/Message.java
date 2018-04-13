@@ -1,5 +1,10 @@
 package ch.heigvd.res.model.mail;
 
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: A message reprensents a simple textual body (with subject and body content)
+ * @Date: 13.04.2018
+ */
 public class Message
 {
 

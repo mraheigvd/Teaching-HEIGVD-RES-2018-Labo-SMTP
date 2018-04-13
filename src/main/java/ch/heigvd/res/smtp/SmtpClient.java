@@ -12,7 +12,13 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
- * As read on RFC 5321, here is a typical SMTP Transaction Scenario :
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: The SmtpClient is a very basic SMTP client.
+ *         It will open a SMTP session with a server and sending the messages following RFC rules of the
+ *         SMTP protocol. We used the last RFC on date (5321). Here is a basic example of a SMTP transaction scenario:
+ *
+ * @example:
+ * As read on RFC 5321, here is a typical SMTP Transaction Scenario (S = server, C = client) :
  *       S: 220 foo.com Simple Mail Transfer Service Ready
  *       C: EHLO bar.com
  *       S: 250-foo.com greets bar.com
@@ -24,18 +30,21 @@ import java.util.logging.Logger;
  *       S: 250 OK
  *       C: RCPT TO:<Jones@foo.com>
  *       S: 250 OK
- *       C: RCPT TO:<Green@foo.com>
- *       S: 550 No such user here
  *       C: RCPT TO:<Brown@foo.com>
  *       S: 250 OK
  *       C: DATA
  *       S: 354 Start mail input; end with <CRLF>.<CRLF>
+ *       C: Subject: tititi
+ *       C: From: steve.jobs@apple.ch
+ *       C: To: Smith@bar.com, Jones@foo.com, Brown@foo.com
  *       C: Blah blah blah...
  *       C: ...etc. etc. etc.
  *       C: .
  *       S: 250 OK
  *       C: QUIT
  *       S: 221 foo.com Service closing transmission channel
+ *
+ * @Date: 13.04.2018
  */
 public class SmtpClient implements ISmtpClient {
 
@@ -55,10 +64,12 @@ public class SmtpClient implements ISmtpClient {
     private static final String SMTP_CONTENT_TYPE = "Content-Type: text/plain; charset=\"UTF-8\"" + SMTP_NEW_LINE;
 
     private static final String SMTP_DATA_CC = "Cc: ";
+    private static final String SMTP_DATA_BCC = "Bcc: ";
     private static final String SMTP_DATA_TO = "To: ";
     private static final String SMTP_END = "." + SMTP_NEW_LINE;
     private static final String SMTP_CLOSE = "QUIT" + SMTP_NEW_LINE;
 
+    // Config and sockets
     private Config config;
     private Socket socket;
     private PrintWriter writer;
@@ -66,18 +77,6 @@ public class SmtpClient implements ISmtpClient {
 
     public SmtpClient(Config config) {
         this.config = config;
-    }
-
-    private void print(String m, boolean newLine) {
-        if (newLine)
-            print(m + SMTP_NEW_LINE);
-        else
-            print(m);
-    }
-    private void print(String m) {
-        System.out.print(m);
-        writer.write(m);
-        writer.flush();
     }
 
     // Create a SMTP connection in order to send a mail
@@ -135,7 +134,6 @@ public class SmtpClient implements ISmtpClient {
         String res = reader.readLine();
         System.out.println(res);
 
-
         // Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
         print("Date: " + dateFormat.format(new Date()), true);
@@ -165,6 +163,15 @@ public class SmtpClient implements ISmtpClient {
             print(tmp, true);
         }
 
+        // BCCs
+        if (mail.getCc() != null) {
+            tmp = SMTP_DATA_BCC + mail.getCc().get(0);
+            for (int i = 1; i < mail.getCc().size(); ++i) {
+                tmp += ", " + mail.getCc().get(i);
+            }
+            print(tmp, true);
+        }
+
         // Message body
         print("", true);
         print(mail.getBody(), true);
@@ -177,5 +184,18 @@ public class SmtpClient implements ISmtpClient {
         reader.close();
         socket.close();
         System.out.print("\nMessage sent ...");
+    }
+
+    private void print(String m, boolean newLine) {
+        if (newLine)
+            print(m + SMTP_NEW_LINE);
+        else
+            print(m);
+    }
+
+    private void print(String m) {
+        System.out.print(m);
+        writer.write(m);
+        writer.flush();
     }
 }

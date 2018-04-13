@@ -8,6 +8,11 @@ import ch.heigvd.res.model.mail.Person;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: The prank generator will generate pranks for a random group with random mails (@see Group and Prank classes)
+ * @Date: 13.04.2018
+ */
 public class PrankGenerator {
     private Config config;
     private ArrayList<Mail> pranks;

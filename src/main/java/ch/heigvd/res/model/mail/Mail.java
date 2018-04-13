@@ -2,6 +2,11 @@ package ch.heigvd.res.model.mail;
 
 import java.util.ArrayList;
 
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: A basic mail is a group of persons (senders, recipients, etc.) and a message (with body and mime parts)
+ * @Date: 13.04.2018
+ */
 public class Mail {
     private Group group;
     private Message message;

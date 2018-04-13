@@ -2,6 +2,11 @@ package ch.heigvd.res.model.mail;
 
 import java.util.ArrayList;
 
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: Represent a Group of persons
+ * @Date: 13.04.2018
+ */
 public class Group {
     private Person sender;
     private ArrayList<Person> receivers;

@@ -6,14 +6,12 @@ import ch.heigvd.res.model.mail.Person;
 
 import java.util.ArrayList;
 
+/**
+ * @Author: Mentor Reka & Kamil Amrani
+ * @Brief: A prank is a mail for a group
+ * @Date: 13.04.2018
+ */
 public class Prank {
-
-    /**
-     * private Person victimSender;
-     * private final List<Person> victimsRecipients;
-     * private final List<Person> witnessRecipients;
-     * private String message etc...
-     */
     private Group group;
     private Message message;
 
