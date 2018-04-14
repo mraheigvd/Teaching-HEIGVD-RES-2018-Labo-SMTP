@@ -164,10 +164,10 @@ public class SmtpClient implements ISmtpClient {
         }
 
         // BCCs
-        if (mail.getCc() != null) {
-            tmp = SMTP_DATA_BCC + mail.getCc().get(0);
-            for (int i = 1; i < mail.getCc().size(); ++i) {
-                tmp += ", " + mail.getCc().get(i);
+        if (mail.getBcc() != null) {
+            tmp = SMTP_DATA_BCC + mail.getBcc().get(0);
+            for (int i = 1; i < mail.getBcc().size(); ++i) {
+                tmp += ", " + mail.getBcc().get(i);
             }
             print(tmp, true);
         }
@@ -177,13 +177,17 @@ public class SmtpClient implements ISmtpClient {
         print(mail.getBody(), true);
         print(SMTP_END, true);
 
-        System.out.println(reader.readLine());
+        String statusSrv = reader.readLine();
 
         print(SMTP_CLOSE);
         writer.close();
         reader.close();
         socket.close();
-        System.out.print("\nMessage sent ...");
+
+        if (statusSrv.startsWith(SMTP_STATUS_OK))
+            System.out.println("\nMessage sent ...");
+        else
+            System.out.println("\nError duing sending");
     }
 
     private void print(String m, boolean newLine) {
