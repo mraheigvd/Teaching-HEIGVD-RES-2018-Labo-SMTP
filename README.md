@@ -2,7 +2,7 @@
 
 ## Description
 
-Mailrobot is a client application (TCP) in Java in order to communicate through the Java Socket API with a SMTP server. 
+Mailrobot is a (TCP) client application written in Java which communicate through the Java Socket API with a SMTP server. 
 This application automaticaly generate pranks email to a list of emails (the victims). 
 Application is configured by the config.properties file which contains these properties:
 
@@ -25,7 +25,7 @@ On this lab we use MockMock. MockMock is a cross-platform SMTP server built on J
 emails are sent (without actually sending them) and to see what they look like. 
 It provides a web interface that displays which emails were sent and shows you what the contents of those emails are.
 
-In order to facilitate the use we have generated a docker image that you can run by :
+In order to facilitate the use we have build a docker image that you can run by :
 
 ```
 docker run -p 2525:25 -p 8080:8282 mraheigvd/mailrobot-mock
