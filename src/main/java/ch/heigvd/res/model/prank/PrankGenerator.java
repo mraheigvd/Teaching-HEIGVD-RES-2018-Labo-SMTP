@@ -4,9 +4,11 @@ import ch.heigvd.res.config.Config;
 import ch.heigvd.res.model.mail.Group;
 import ch.heigvd.res.model.mail.Mail;
 import ch.heigvd.res.model.mail.Person;
+import ch.heigvd.res.smtp.SmtpClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 /**
  * @Author: Mentor Reka & Kamil Amrani
@@ -14,6 +16,8 @@ import java.util.Collections;
  * @Date: 13.04.2018
  */
 public class PrankGenerator {
+    private static final Logger LOG = Logger.getLogger(PrankGenerator.class.getName());
+
     private Config config;
     private ArrayList<Mail> pranks;
 
@@ -27,9 +31,20 @@ public class PrankGenerator {
     }
 
     public void generatePranks(int nbrGroups) {
-        if(nbrGroups < 1) ;// error
-        if(config.getPersons().size() < 3) ;// error
-        if(config.getMessages().size() < 1) ;// error
+        if(nbrGroups < 1) {
+            LOG.warning("Number of groups less than 1");
+            return;
+        }
+
+        if(config.getPersons().size() < 3) {
+            LOG.warning("We need at least two recipients and one sender. Found only : " + config.getPersons().size());
+            return;
+        }
+
+        if(config.getMessages().size() < 1) {
+            LOG.warning("No messages found");
+            return;
+        }
 
         pranks.clear();
 
