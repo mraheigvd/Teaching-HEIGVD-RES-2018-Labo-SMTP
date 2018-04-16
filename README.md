@@ -40,7 +40,7 @@ F.Y : -p <LOCAL_PORT>:<CONTAINER_PORT>
 
 For running pranks you have to clone this repo then edit config.properties, EMAILS_FILE and MESSAGES_FILES consequently.
 
-After that, you just have to run MailRobot.java and looking at http://<DOCKER_IP_MACHINE>:8080/
+After that, you just have to run MailRobot.java and look at http://<DOCKER_IP_MACHINE>:8080/
 
 
 
