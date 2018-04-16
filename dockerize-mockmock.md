@@ -2,7 +2,7 @@
 
 We used MockMock, a cross-platform SMTP server built on Java. 
 We have build a docker image in order to facilitate the use of our solutions.
-Here are the steps for building the docker images with latest MockMock sources :
+Here are the steps for building the docker image with latest MockMock sources :
 
 
 Create the dockerfile with this content (adapt it):
@@ -33,16 +33,15 @@ docker iamges
 
 For publishing your docker image on docker hub :
 
-Create an account and a repo on your account on docker hub : https://hub.docker.com/
+Create an account and a repo on docker hub : https://hub.docker.com/
 
-2) Login to docker : ```docker login```
+2) Login to docker from a terminal : ```docker login```
 
 3) Tag your image ```docker tag  your_account/your_repose:your_tag``` (usualy tag should be: latest)
 
 4) Publish it: ```docker push your_account/your_repo```
 
 finaly you (and your friends) can easily run your docker container like that:
-
 
 ```
 docker run -p 2525:25 -p 8080:8282 mraheigvd/mailrobot-mock
