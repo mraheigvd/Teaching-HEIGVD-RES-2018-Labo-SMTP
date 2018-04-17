@@ -3,6 +3,7 @@ package ch.heigvd.res.smtp;
 import ch.heigvd.res.config.Config;
 import ch.heigvd.res.model.mail.Mail;
 import ch.heigvd.res.model.mail.Person;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.*;
 import java.net.Socket;
@@ -91,7 +92,7 @@ public class SmtpClient implements ISmtpClient {
         System.out.print(reader.readLine()); // Welcome from the SMTP server
 
         // EHLO server
-        print(SMTP_EHLO + config.getSMTP_SERVER(), true);
+        send(SMTP_EHLO + config.getSMTP_SERVER(), true);
         line = reader.readLine();
         if (!line.startsWith(SMTP_STATUS_OK))
             throw new IOException("Error during EHLO: " + line);
@@ -102,21 +103,21 @@ public class SmtpClient implements ISmtpClient {
         }
 
         // MAIL FROM
-        print(SMTP_MAIL_FROM + "<" + mail.getSender().getEmail() + ">", true);
+        send(SMTP_MAIL_FROM + "<" + mail.getSender().getEmail() + ">", true);
         line = reader.readLine();
         System.out.print(line + SMTP_NEW_LINE);
 
         // RCPT TO
         //for (String to : mail.getRecipients()) {
         for (Person to : mail.getReceivers()) {
-            print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
+            send(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
             System.out.print(reader.readLine() + SMTP_NEW_LINE);
         }
 
         // CC
         if (mail.getCc() != null) {
             for (Person to : mail.getCc()) {
-                print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
+                send(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
@@ -124,35 +125,35 @@ public class SmtpClient implements ISmtpClient {
         // BCC
         if (mail.getBcc() != null) {
             for (Person to : mail.getBcc()) {
-                print(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
+                send(SMTP_RCPT_TO + "<" + to.getEmail() + ">", true);
                 System.out.print(reader.readLine() + SMTP_NEW_LINE);
             }
         }
 
         // DATA
-        print(SMTP_DATA);
+        send(SMTP_DATA);
         String res = reader.readLine();
         System.out.println(res);
 
         // Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss Z", Locale.ENGLISH);
-        print("Date: " + dateFormat.format(new Date()), true);
+        send("Date: " + dateFormat.format(new Date()), true);
 
         // RECIPIENTS
         String tmp = SMTP_DATA_TO + mail.getReceivers().get(0).getEmail();
         for (int i = 1; i < mail.getReceivers().size(); ++i) {
             tmp += "," + mail.getReceivers().get(i).getEmail();
         }
-        print(tmp, true);
+        send(tmp, true);
 
         // DATA FROM
-        print(SMTP_DATA_FROM + mail.getSender().getEmail(), true);
+        send(SMTP_DATA_FROM + mail.getSender().getEmail(), true);
 
         // SUBJECT
-        print(SMTP_DATA_SUBJECT + mail.getSubject().trim(), true);
+        send(SMTP_DATA_SUBJECT + mail.getSubject().trim(), true);
 
         // CONTENT TYPE
-        print(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
+        send(SMTP_CONTENT_TYPE + SMTP_NEW_LINE);
 
         // CCs
         if (mail.getCc() != null) {
@@ -160,7 +161,7 @@ public class SmtpClient implements ISmtpClient {
             for (int i = 1; i < mail.getCc().size(); ++i) {
                 tmp += ", " + mail.getCc().get(i);
             }
-            print(tmp, true);
+            send(tmp, true);
         }
 
         // BCCs
@@ -169,17 +170,17 @@ public class SmtpClient implements ISmtpClient {
             for (int i = 1; i < mail.getBcc().size(); ++i) {
                 tmp += ", " + mail.getBcc().get(i);
             }
-            print(tmp, true);
+            send(tmp, true);
         }
 
         // Message body
-        print("", true);
-        print(mail.getBody(), true);
-        print(SMTP_END, true);
+        send("", true);
+        send(mail.getBody(), true);
+        send(SMTP_END, true);
 
         String statusSrv = reader.readLine();
 
-        print(SMTP_CLOSE);
+        send(SMTP_CLOSE);
         writer.close();
         reader.close();
         socket.close();
@@ -190,14 +191,14 @@ public class SmtpClient implements ISmtpClient {
             System.out.println("\nError duing sending");
     }
 
-    private void print(String m, boolean newLine) {
+    private void send(String m, boolean newLine) {
         if (newLine)
-            print(m + SMTP_NEW_LINE);
+            send(m + SMTP_NEW_LINE);
         else
-            print(m);
+            send(m);
     }
 
-    private void print(String m) {
+    private void send(String m) {
         System.out.print(m);
         writer.write(m);
         writer.flush();

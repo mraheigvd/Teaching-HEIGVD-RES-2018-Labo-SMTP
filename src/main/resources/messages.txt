@@ -1,3 +1,16 @@
+Subject: Liste des étudiants à faire
+Message: étudiant
+à faire
+Tôto
+
+Wesh on teste l'encodage
+---
+Subject: Liste des étudiants à faire
+Message:
+étudiant
+à faire
+Tôto
+---
 Subject: Hi guys, do you want to buy Viagra ?
 Message:
 I have a big stock of Viagra in my house. Do you wannna try ??
