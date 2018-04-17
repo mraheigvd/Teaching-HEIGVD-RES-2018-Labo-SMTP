@@ -55,7 +55,7 @@ public class PrankGenerator {
         //generate pranks
         for(int i = 0; i < nbrGroups; i++) {
 
-            Person sender = config.getPersons().get(index++);
+            Person sender = config.getPersons().get((index++) % totalPersons);
             ArrayList<Person> receivers = new ArrayList<Person>();
             if(i == nbrGroups - 1) nbrPersons = Math.max(2, nbrPersons + totalPersons - (nbrGroups * (nbrPersons + 1)));
 
