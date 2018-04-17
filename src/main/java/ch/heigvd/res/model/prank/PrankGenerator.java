@@ -48,11 +48,21 @@ public class PrankGenerator {
 
         pranks.clear();
 
+        Collections.shuffle(config.getPersons());
+        int totalPersons = config.getPersons().size();
+        int nbrPersons = Math.max(2, (totalPersons / nbrGroups) - 1);
+        int index = 0;
         //generate pranks
         for(int i = 0; i < nbrGroups; i++) {
+
+            Person sender = config.getPersons().get(index++);
+            ArrayList<Person> receivers = new ArrayList<Person>();
+            if(i == nbrGroups - 1) nbrPersons = Math.max(2, nbrPersons + totalPersons - (nbrGroups * (nbrPersons + 1)));
+
+            for(int j = 0; j < nbrPersons; j++) receivers.add(config.getPersons().get((index++) % totalPersons));
+
             Collections.shuffle(config.getMessages());
-            int nbrPersons = Math.max(2, config.getPersons().size() / nbrGroups);
-            pranks.add(new Mail(generateGroup(nbrPersons), config.getMessages().get(0)));
+            pranks.add(new Mail(new Group(sender, receivers), config.getMessages().get(0)));
         }
     }
 
