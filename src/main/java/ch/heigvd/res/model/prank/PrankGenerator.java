@@ -65,12 +65,4 @@ public class PrankGenerator {
             pranks.add(new Mail(new Group(sender, receivers), config.getMessages().get(0)));
         }
     }
-
-    private Group generateGroup(int size) {
-        ArrayList<Person> receivers = new ArrayList<Person>();
-        Collections.shuffle(config.getPersons());
-        Person sender = config.getPersons().get(0);
-        for(int i = 0; i < size; i++) receivers.add(config.getPersons().get(i + 1));
-        return new Group(sender, receivers);
-    }
 }
